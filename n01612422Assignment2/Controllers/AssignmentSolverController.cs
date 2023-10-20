@@ -101,14 +101,22 @@ namespace n01612422Assignment2.Controllers
             }
             return "There are " + numOfWays + " total ways to get sum 10.";
         }
+
         /// <summary>
         /// Original question: 2022 J3
         /// Source: https://cemc.math.uwaterloo.ca/contests/computing/past_ccc_contests/2022/ccc/juniorEF.pdf
         /// Modification made: In order to take input that has '+' and '-' sign, 
         /// I made this action to accept post request and take the instructions as plain text from the request body
+        /// Sample input: "AFB+8SC-4H-2GDPE+9"
         /// Sample curl command: curl -d "AFB+8SC-4H-2GDPE+9" http://localhost:50530/api/harptuning
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// Sample response: 
+        /// AFB tighten 8
+        /// SC loosen 4
+        /// H loosen 2
+        /// GDPE tighten 9
+        /// </returns>
         [HttpPost]
         [Route("api/HarpTuning")]
         
@@ -124,27 +132,27 @@ namespace n01612422Assignment2.Controllers
 
             MatchCollection matches = Regex.Matches(instructions, instructionPattern);
 
-            // Loop thru each sub instruction e.g AFB+8
+            // Loop thru each sub instruction e.g AFB+8, SC-4, H-2, GDPE+9
             List<string> result = new List<string>();
             foreach (Match match in matches)
             {
                 
                 string instruction = match.Value;
-                string letter;
+                string letters;
                 string turns;
                 
                 if (instruction.Contains("+"))
                 {
                     string[] instructionParts = instruction.Split('+');
-                    letter = instructionParts[0];
+                    letters = instructionParts[0];
                     turns = instructionParts[1];
-                    result.Add(letter + " tighten " + turns);
+                    result.Add(letters + " tighten " + turns);
                 } else if (instruction.Contains("-"))
                 {
                     string[] instructionParts = instruction.Split('-');
-                    letter = instructionParts[0];
+                    letters = instructionParts[0];
                     turns = instructionParts[1];
-                    result.Add(letter + " losen " + turns);
+                    result.Add(letters + " losen " + turns);
                 }
             }
 
